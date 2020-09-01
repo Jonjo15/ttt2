@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Tic-Tac-Toe</title>
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <div class="inputDiv">
+        <form>
+            <input id="playerOne" type="text" placeholder="player1">
+            <input id="playerTwo" type="text" placeholder="player2">
+            <button id="submit" type="button">Submit</button>
+        </form>
+    </div>
+    <div class="scoreBoard">
+        <button id="reset" type="button" >Reset</button>
+    </div>
+    <div class="board">
+        <div class="top">
+            <div class="divs" data-position="0"></div>
+            <div class="center divs" data-position="1"></div>
+            <div class="divs" data-position="2"></div>
+        </div>
+        <div class="mid">
+            <div class="divs" data-position="3"></div>
+            <div data-position="4" class="center divs"></div>
+            <div class="divs" data-position="5"></div>
+        </div>
+        <div class="bot">
+            <div class="divs" data-position="6"></div>
+            <div data-position="7" class="center divs"></div>
+            <div class="divs" data-position="8"></div>
+        </div>
+    </div>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
