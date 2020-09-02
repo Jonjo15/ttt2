@@ -18,6 +18,7 @@ let Gameboard = (function() {
     let playersArray = [];
     let currentPlayer;
     let numOfTies = 0;
+    let numOfRounds = 0;
     let moveCount = 0;
     let winningMoves = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8], [2,4,6]];
     let gameOver = true;
@@ -33,21 +34,26 @@ let Gameboard = (function() {
                 moveCount += 1;
                 e.target.classList.add("marked");
                 if (checkIfSomeoneWon(currentPlayer.playedMoves)) {
-                    alert("YAAAAAAAAAAAAA");
+                    //alert("YAAAAAAAAAAAAA");
                     gameOver = true;
                     currentPlayer.wins += 1;
                     updateScoreBoard();
                     winnerAnnouncement.textContent = currentPlayer.name + " won, press Play Again to play another round";
-                    playAgainButton.style.display = "block";
+                    playAgainButton.style.display = "inline-block";
+                    moveCount = 0;
                 }
                 if (moveCount == 9) {
                     numOfTies += 1;
                     winnerAnnouncement.textContent = "TIE, press Play Again to play another round";
                     updateScoreBoard();
                     gameOver = true;
-                    playAgainButton.style.display = "block";
+                    playAgainButton.style.display = "inline-block";
+                    moveCount = 0;
                 }
-                changeCurrentPlayer();
+                if (!gameOver) {
+                    changeCurrentPlayer();
+                }
+                
 
             }
             
@@ -68,6 +74,9 @@ let Gameboard = (function() {
     resetButton.addEventListener("click", (e) => {
         //resetFunction();
         playersArray = [];
+        moveCount = 0;
+        numOfRounds = 0;
+        numOfTies = 0;
         scorePara.textContent = "";
         winnerAnnouncement.textContent = "";
         playAgainButton.style.display = "none";
@@ -81,9 +90,12 @@ let Gameboard = (function() {
             player.playedMoves = [];
         });
         clearBoard();
+        moveCount = 0;
+        numOfRounds += 1;
         winnerAnnouncement.textContent = "";
         playAgainButton.style.display = "none";
         gameOver = false;
+        alternateStartingPlayer();
         //removeAnnouncement
         //removeButton
         //gameoverFalse
@@ -133,7 +145,14 @@ let Gameboard = (function() {
         });
         return bool;
     }
-    
+    function alternateStartingPlayer() {
+        if (numOfRounds % 2 == 1) {
+            currentPlayer = playersArray[1];
+        }
+        else {
+            currentPlayer = playersArray[0];
+        }
+    }
     function updateScoreBoard() {
         scorePara.textContent = playersArray[0].name + ": " + playersArray[0].wins + ", Ties: " + numOfTies + ", " + playersArray[1].name + ": " + playersArray[1].wins;
 
