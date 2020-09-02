@@ -2,10 +2,15 @@ let Gameboard = (function() {
     //dom manipulation
     let divs = document.querySelectorAll(".divs");
     let inputDiv = document.querySelector(".inputDiv");
+    let scoreDiv = document.querySelector(".scoreBoard");
     let player0neInput = document.querySelector("#playerOne");
     let playerTwoInput = document.querySelector("#playerTwo");
     let submitButton = document.querySelector("#submit");
     let resetButton = document.querySelector("#reset");
+    let playAgainButton = document.createElement("button");
+    playAgainButton.textContent = "Play Again";
+    playAgainButton.style.display = "none";
+    scoreDiv.appendChild(playAgainButton);
     let scorePara = document.querySelector(".scorePara");
     let winnerAnnouncement = document.querySelector(".winnerAnnouncement");
 
@@ -21,20 +26,27 @@ let Gameboard = (function() {
     //events
     divs.forEach((div) => {
         div.addEventListener("click", (e) => {
-            if (!gameOver && !e.target.classList.contains("marked") && moveCount < 9) {
+            if (!gameOver && !e.target.classList.contains("marked")) {
                 e.target.textContent = currentPlayer.move;
                 console.log(currentPlayer.name);
                 currentPlayer.playedMoves.push(+e.target.dataset.position);
+                moveCount += 1;
                 e.target.classList.add("marked");
                 if (checkIfSomeoneWon(currentPlayer.playedMoves)) {
-                    //alert("YAAAAAAAAAAAAA");
+                    alert("YAAAAAAAAAAAAA");
+                    gameOver = true;
                     currentPlayer.wins += 1;
-                    //announceWin
-                    //resetBoard
-                    //updateScoreBoard
-
+                    updateScoreBoard();
+                    winnerAnnouncement.textContent = currentPlayer.name + " won, press Play Again to play another round";
+                    playAgainButton.style.display = "block";
                 }
-                
+                if (moveCount == 9) {
+                    numOfTies += 1;
+                    winnerAnnouncement.textContent = "TIE, press Play Again to play another round";
+                    updateScoreBoard();
+                    gameOver = true;
+                    playAgainButton.style.display = "block";
+                }
                 changeCurrentPlayer();
 
             }
@@ -55,8 +67,29 @@ let Gameboard = (function() {
 
     resetButton.addEventListener("click", (e) => {
         //resetFunction();
+        playersArray = [];
+        scorePara.textContent = "";
+        winnerAnnouncement.textContent = "";
+        playAgainButton.style.display = "none";
+        gameOver = true;
+        clearBoard();
         inputDiv.style.display = "flex";
     });
+
+    playAgainButton.addEventListener("click", (e) => {
+        playersArray.forEach(player => {
+            player.playedMoves = [];
+        });
+        clearBoard();
+        winnerAnnouncement.textContent = "";
+        playAgainButton.style.display = "none";
+        gameOver = false;
+        //removeAnnouncement
+        //removeButton
+        //gameoverFalse
+    });
+
+
 
     //player Factory
     let Player= function(name, move) {
@@ -106,6 +139,12 @@ let Gameboard = (function() {
 
         //if game over display playagain button and announce winner
         
+    }
+    function clearBoard() {
+        divs.forEach(div => {
+            div.textContent = "";
+            div.classList.remove("marked");
+        })
     }
     return {playersArray, currentPlayer}
 })();
